@@ -9,7 +9,7 @@
     "changeset": "changeset",
     "format": "prettier . --write",
     "lint": "prettier . --check",
-    "release": "changeset release",
+    "release": "changeset publish",
     "setup": "pnpm install && cd tests/fixtures/svelte && pnpm install && cd -",
     "test": "vitest run",
     "test:watch": "vitest watch"
