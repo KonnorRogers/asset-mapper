@@ -6,11 +6,12 @@
   "module": "src/index.js",
   "types": "./index.d.ts",
   "scripts": {
+    "changeset": "changeset",
+    "format": "prettier . --write",
+    "lint": "prettier . --check",
     "setup": "pnpm install && cd tests/fixtures/svelte && pnpm install && cd -",
     "test": "vitest run",
-    "test:watch": "vitest watch",
-    "lint": "prettier . --check",
-    "format": "prettier . --write"
+    "test:watch": "vitest watch"
   },
   "keywords": [
     "esbuild",
@@ -29,6 +30,7 @@
     "access": "public"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.26.1",
     "@popperjs/core": "^2.11.6",
     "bootstrap": "^5.2.3",
     "esbuild": "^0.17.14",
