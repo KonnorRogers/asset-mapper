@@ -1,4 +1,4 @@
-import { test } from "vitest"
+import { test } from "vitest";
 // import * as path from "node:path"
 // import { rollup } from "rollup"
 //
@@ -17,6 +17,6 @@ import { test } from "vitest"
 // }
 //
 test.skip("Should work with rollup", async () => {
-  const bundle = await rollup(options)
-  bundle.write()
-})
+  const bundle = await rollup(options);
+  bundle.write();
+});

@@ -6,8 +6,11 @@
   "module": "src/index.js",
   "types": "./index.d.ts",
   "scripts": {
+    "setup": "pnpm install && cd tests/fixtures/svelte && pnpm install && cd -",
     "test": "vitest run",
-    "test:watch": "vitest watch"
+    "test:watch": "vitest watch",
+    "lint": "prettier . --check",
+    "format": "prettier . --write"
   },
   "keywords": [
     "esbuild",
@@ -31,6 +34,7 @@
     "esbuild": "^0.17.14",
     "glob": "^9.3.2",
     "jquery": "^3.6.4",
+    "prettier": "^2.8.7",
     "rollup": "^3.20.2",
     "vite": "^4.2.1",
     "vitest": "^0.29.8"

@@ -1,4 +1,4 @@
-import { test } from 'vitest'
+import { test } from "vitest";
 // import * as path from 'path'
 // import * as esbuild from "esbuild"
 // import { ESBuildAssetMapper } from "../src/esbuild.js"
@@ -26,4 +26,4 @@ import { test } from 'vitest'
 
 test.skip("Should put all files into a manifest", async () => {
   // await esbuild.build(esbuildConfig)
-})
+});

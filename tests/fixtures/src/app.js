@@ -1,7 +1,6 @@
-import jquery from "jquery"
+import jquery from "jquery";
 
+window.jquery = jquery;
 
-window.jquery = jquery
-
-const thing = "hi"
-export { thing }
+const thing = "hi";
+export { thing };

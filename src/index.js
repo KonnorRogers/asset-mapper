@@ -1,3 +1,1 @@
-export {
-  RollupAssetMapper
-} from "./rollup"
+export { RollupAssetMapper } from "./rollup";

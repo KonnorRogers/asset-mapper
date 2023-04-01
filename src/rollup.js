@@ -1,6 +1,6 @@
-import * as path from "path"
-import * as fs from "fs/promises"
-import { createHash } from "crypto"
+import * as path from "path";
+import * as fs from "fs/promises";
+import { createHash } from "crypto";
 
 /**
  * @typedef {object} RollupAssetMapperOptions - Options for RollupAssetMapper
@@ -17,84 +17,99 @@ import { createHash } from "crypto"
  * @param {RollupAssetMapperOptions} pluginOptions - Options for plugin
  * @return {import("rollup").Plugin}
  */
-export function RollupAssetMapper (pluginOptions = {}) {
-  const defaultManifestFile = "asset-mapper-manifest.json"
+export function RollupAssetMapper(pluginOptions = {}) {
+  const defaultManifestFile = "asset-mapper-manifest.json";
   return {
     name: "RollupAssetMapper",
     // I dont think we care about the manifest for dev server.
     apply: "build",
     writeBundle: {
       sequential: true,
-			order: 'post',
-      async handler (options, bundle) {
-        let { manifestFile } = pluginOptions
+      order: "post",
+      async handler(options, bundle) {
+        let { manifestFile } = pluginOptions;
 
-
-        if (pluginOptions.skipManifest === true || pluginOptions.skipManifest?.(options) === true) {
-          return
+        if (
+          pluginOptions.skipManifest === true ||
+          pluginOptions.skipManifest?.(options) === true
+        ) {
+          return;
         }
 
-        const outDir = options.outDir || options.dir || path.dirname(options.file)
+        const outDir =
+          options.outDir || options.dir || path.dirname(options.file);
 
         if (!manifestFile) {
-          manifestFile = path.join(outDir, defaultManifestFile)
-          console.warn(`[RollupAssetMapper]: No {manifestFile} option specified. Outputting to: ${manifestFile}`)
+          manifestFile = path.join(outDir, defaultManifestFile);
+          console.warn(
+            `[RollupAssetMapper]: No {manifestFile} option specified. Outputting to: ${manifestFile}`
+          );
         }
 
-        ;["entryFileNames", "assetFileNames", "chunkFileNames"].forEach((str) => {
-          if (options[str].includes("[hash]")) {
-            console.warn(`[RollupAssetMapper]: This plugin won't be able to work correctly because {${str}} contains the [hash] keyword`)
+        ["entryFileNames", "assetFileNames", "chunkFileNames"].forEach(
+          (str) => {
+            if (options[str].includes("[hash]")) {
+              console.warn(
+                `[RollupAssetMapper]: This plugin won't be able to work correctly because {${str}} contains the [hash] keyword`
+              );
+            }
           }
-        })
+        );
 
         // @TODO do we need to worry about memory leaks here?
         /** @type Map<string, string> */
-        const manifest = new Map()
+        const manifest = new Map();
 
         // console.log("BUNDLE: ", Object.keys(bundle))
         // console.log("OUTDIR: ", outDir)
 
-        await Promise.allSettled(Object.keys(bundle).map(async (fileName) => {
-          // May be too presumptuous with "manifest.json"
-          if (fileName.endsWith("manifest.json")) {
-            return
-          }
+        await Promise.allSettled(
+          Object.keys(bundle).map(async (fileName) => {
+            // May be too presumptuous with "manifest.json"
+            if (fileName.endsWith("manifest.json")) {
+              return;
+            }
 
-          if (pluginOptions.shouldHash != null && pluginOptions.shouldHash(fileName, options) !== true) {
-            return
-          }
+            if (
+              pluginOptions.shouldHash != null &&
+              pluginOptions.shouldHash(fileName, options) !== true
+            ) {
+              return;
+            }
 
+            const fileBuffer = await fs.readFile(path.join(outDir, fileName));
 
-          const fileBuffer = await fs.readFile(path.join(outDir, fileName))
+            const hash =
+              pluginOptions.hashFile?.(fileBuffer) ?? hashFile(fileBuffer);
 
-          const hash = pluginOptions.hashFile?.(fileBuffer) ?? hashFile(fileBuffer)
+            const { dir, name, ext } = path.parse(fileName);
+            const hashedFileName = path.join(dir, name + "-" + hash + ext);
 
-          const { dir, name, ext } = path.parse(fileName)
-          const hashedFileName = path.join(dir, name + "-" + hash + ext)
+            manifest.set(fileName, hashedFileName);
 
-          manifest.set(fileName, hashedFileName)
+            const fullFileName = path.join(outDir, fileName);
+            const fullHashedPath = path.join(outDir, hashedFileName);
 
-          const fullFileName = path.join(outDir, fileName)
-          const fullHashedPath = path.join(outDir, hashedFileName)
+            // When using SvelteKit, they expect the original file to be laying around, so lets just copy instead
+            // of rename. Maybe we make this configurable?
+            await fs.copyFile(fullFileName, fullHashedPath);
+          })
+        );
 
-          // When using SvelteKit, they expect the original file to be laying around, so lets just copy instead
-          // of rename
-          await fs.copyFile(fullFileName, fullHashedPath)
-        }))
-
-        const json = JSON.stringify({ assets: Object.fromEntries(manifest)}, null, 2)
-        await fs.writeFile(manifestFile, json, { encoding: "utf8" })
-        console.info(`[RollupAssetMapper]: Successfully wrote to ${manifestFile}`)
-      }
-    }
-  }
+        const json = JSON.stringify(Object.fromEntries(manifest), null, 2);
+        await fs.writeFile(manifestFile, json, { encoding: "utf8" });
+        console.info(
+          `[RollupAssetMapper]: Successfully wrote to ${manifestFile}`
+        );
+      },
+    },
+  };
 }
-
 
 /**
  * @param {Buffer} buffer
  * @return {string} - Returns the first 16 characters of a sha256 hash.
  */
-function hashFile (buffer) {
-  return createHash('sha256').update(buffer).digest("hex").substring(0, 16);
+function hashFile(buffer) {
+  return createHash("sha256").update(buffer).digest("hex").substring(0, 16);
 }
