@@ -50,10 +50,13 @@ export default {
 
 ## Checkout SvelteKit
 
+Right now there is a patch package in place to change from hashed files to unhashed files.
+Perhaps theres a way to fix it with config, but I wanted to get a quick prototype.
+
 ```bash
-npx degit https://github.com/konnorrogers/asset-mapper/tests/fixtures/svelte svelte-kit
-cd svelte-kit
-pnpm install
+git clone https://github.com/konnorrogers/asset-mapper.git
+pnpm run setup
+cd tests/fixtures/svelte-kit
 pnpm run build
 ```
 
@@ -79,9 +82,3 @@ Example:
   <body></body>
 </html>
 ```
-
-## Why is the "asset-mapper-manifest" not a flat file?
-
-The basic reason is you may want to add additional metadata. By stuffing everything into the "assets" key
-it allows the manifest to be more easily extending. If you think there's no need to
-keep this open, feel free to file an issue and happy to discuss.
