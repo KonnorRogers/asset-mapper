@@ -1,0 +1,38 @@
+{
+  "name": "asset-mapper",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/index.js",
+  "module": "src/index.js",
+  "types": "./index.d.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "keywords": [
+    "esbuild",
+    "vite",
+    "assets",
+    "importmaps"
+  ],
+  "license": "MIT",
+  "repository": "git@github.com:KonnorRogers/asset-mapper.git",
+  "bugs": {
+    "url": "https://github.com/KonnorRogers/asset-mapper/issues"
+  },
+  "homepage": "https://github.com/KonnorRogers/asset-mapper",
+  "author": "KonnorRogers <konnor5456@gmail.com>",
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@popperjs/core": "^2.11.6",
+    "bootstrap": "^5.2.3",
+    "esbuild": "^0.17.14",
+    "glob": "^9.3.2",
+    "jquery": "^3.6.4",
+    "rollup": "^3.20.2",
+    "vite": "^4.2.1",
+    "vitest": "^0.29.8"
+  }
+}
