@@ -34,5 +34,5 @@ jobs:
           pnpm install
       - name: lint, and test
         run: |
-          pnpm lint
-          pnpm test:ci
+          pnpm run lint
+          pnpm run test
