@@ -1,12 +1,14 @@
 # Purpose
 
-To reduce cache churn by generating stable file names, manually hashing them, and
+Reduce cache churn by generating stable file names, manually hashing them, and
 providing a manifest by which to read the hashed assets. This is generally intended
 for importmaps, but could have other applications as well.
 
 For more info checkout this issue: <https://github.com/sveltejs/kit/issues/4482>
 
 And this reading: <https://philipwalton.com/articles/cascading-cache-invalidation/>
+
+<https://jspm.org/import-map-cdn#the-javascript-module-caching-tradeoff>
 
 ## Installation
 
