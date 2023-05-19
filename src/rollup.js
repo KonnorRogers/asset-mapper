@@ -46,7 +46,12 @@ export function RollupAssetMapper(pluginOptions = {}) {
           );
         }
 
-        ["entryFileNames", "assetFileNames", "chunkFileNames"].forEach(
+        [
+          "entryFileNames",
+          // We actually don't want assetFiles because those can't get handled by importmaps.
+          // "assetFileNames",
+          "chunkFileNames"
+        ].forEach(
           (str) => {
             if (options[str].includes("[hash]")) {
               console.warn(
